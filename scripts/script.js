@@ -1,13 +1,9 @@
-const GRID_WIDTH = "20";
-const GRID_HEIGHT = "20";
+const GRID_WIDTH = 20; // In pixel
+const GRID_HEIGHT = 20; // In pixel
 
 function generateGrid(width, height) {
   let containerElement = document.getElementById("container");
-  const containerWidth = width * GRID_WIDTH;
-  const containerHeight = height * GRID_HEIGHT;
   if (containerElement) {
-    containerElement.style.width = `${containerWidth}px`;
-    containerElement.style.height = `${containerHeight}px`;
     for(let rows = 0; rows < width; rows++) {
       let rowElement = document.createElement("div");
       rowElement.classList.add("container-row");
