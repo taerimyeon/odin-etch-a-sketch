@@ -1,17 +1,17 @@
-const GRID_WIDTH = 20; // In pixel
-const GRID_HEIGHT = 20; // In pixel
+const CONTAINER_DIMENSION = 640; // In pixel
 const GRID_OVERLAY_COLOR = "#00FFFF"; // Cyan
 const GRID_BACKGROUND_COLOR = "#000000" // Black
 let GRID_DATA = {}; // Stores the grid information (to determine if a grid is already clicked or not)
 
-function generateGrid(width, height) {
+function generateGrid(numberOfGrids) {
+  let gridDimension = Math.floor(CONTAINER_DIMENSION/numberOfGrids);
   let containerElement = document.getElementById("container");
   if (containerElement) {
-    for(let rows = 0; rows < width; rows++) {
+    for(let rows = 0; rows < numberOfGrids; rows++) {
       let rowElement = document.createElement("div");
       rowElement.classList.add("container-row");
-      for(let cols = 0; cols < height; cols++) {
-        const gridElement = createGrid();
+      for(let cols = 0; cols < numberOfGrids; cols++) {
+        const gridElement = createGrid(gridDimension);
         gridElement.id = `${rows}-${cols}`;
         gridElement.addEventListener("mouseenter", setOverlay);
         gridElement.addEventListener("mouseleave", unsetOverlay);
@@ -42,15 +42,15 @@ function setColor(event) {
   event.target.style.backgroundColor = GRID_DATA[event.target.id].backgroundColor;
 }
 
-function createGrid() {
+function createGrid(gridDimension) {
   let gridElement = document.createElement("div");
   let gridElementStyle = gridElement.style;
-  gridElementStyle.width = `${GRID_WIDTH}px`;
-  gridElementStyle.height = `${GRID_HEIGHT}px`;
+  gridElementStyle.width = `${gridDimension}px`;
+  gridElementStyle.height = `${gridDimension}px`;
   gridElement.classList.add("grid");
   return gridElement;
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-  generateGrid(16, 16);
+  generateGrid(16);
 })
