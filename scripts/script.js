@@ -9,10 +9,11 @@ function generateGrid(numberOfGrids) {
   if (containerElement) {
     for(let rows = 0; rows < numberOfGrids; rows++) {
       let rowElement = document.createElement("div");
+      rowElement.id = `r${rows+1}`;
       rowElement.classList.add("container-row");
       for(let cols = 0; cols < numberOfGrids; cols++) {
         const gridElement = createGrid(gridDimension);
-        gridElement.id = `${rows}-${cols}`;
+        gridElement.id = `r${rows+1}-c${cols+1}`;
         gridElement.addEventListener("mouseenter", setOverlay);
         gridElement.addEventListener("mouseleave", unsetOverlay);
         gridElement.addEventListener("click", setColor);
@@ -42,6 +43,24 @@ function setColor(event) {
   event.target.style.backgroundColor = GRID_DATA[event.target.id].backgroundColor;
 }
 
+function reinitializeGrid(event) {
+  event.preventDefault();
+  let numberOfGrids = prompt("How many grids to generate (max 100)?", 16);
+  if (numberOfGrids !== null) {
+    numberOfGrids = parseInt(numberOfGrids)
+    if (isNaN(numberOfGrids)) {
+      alert("Please enter valid number (between 1 to 100)");
+      return
+    }
+    if (parseInt(numberOfGrids) > 100) {
+      alert(`Can't generate more than 100 grids!`);
+      return
+    }
+    destroyExistingGrid();
+    generateGrid(numberOfGrids);
+  }
+}
+
 function createGrid(gridDimension) {
   let gridElement = document.createElement("div");
   let gridElementStyle = gridElement.style;
@@ -51,6 +70,16 @@ function createGrid(gridDimension) {
   return gridElement;
 }
 
+function destroyExistingGrid() {
+  let rowElements = document.getElementsByClassName("container-row");
+  let rowElementsCount = rowElements.length;
+  for (let idx = rowElementsCount-1; idx >= 0; idx--) {
+    rowElements[idx].remove();
+  }
+}
+
 document.addEventListener("DOMContentLoaded", function() {
+  let reinitializeButtonElement = document.getElementById("button-reinitialize-grid");
+  reinitializeButtonElement.addEventListener("click", reinitializeGrid);
   generateGrid(16);
 })
