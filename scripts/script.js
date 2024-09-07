@@ -1,6 +1,7 @@
 const CONTAINER_DIMENSION = 640; // In pixel
 const GRID_OVERLAY_COLOR = "#00FFFF"; // Cyan
 const GRID_BACKGROUND_COLOR = "#000000" // Black
+const GRID_OPACITY_INCREMENT_RATE = 10; // In percentage
 let GRID_DATA = {}; // Stores the grid information (to determine if a grid is already clicked or not)
 
 function generateGrid(numberOfGrids) {
@@ -26,19 +27,33 @@ function generateGrid(numberOfGrids) {
 
 function setOverlay(event) {
   event.target.style.backgroundColor = GRID_OVERLAY_COLOR;
+  if (GRID_DATA[event.target.id] !== undefined && GRID_DATA[event.target.id].opacity < 100) {
+    event.target.style.opacity = "100%";
+  }
 }
 
 function unsetOverlay(event) {
   if (GRID_DATA[event.target.id] !== undefined) {
     event.target.style.backgroundColor = GRID_DATA[event.target.id].backgroundColor;
+    event.target.style.opacity = `${GRID_DATA[event.target.id].opacity}%`;
   } else {
     event.target.style.backgroundColor = "";
   }
 }
 
 function setColor(event) {
+  if (GRID_DATA[event.target.id]) {
+    let targetOpacity = GRID_DATA[event.target.id].opacity;
+    if (targetOpacity < 100) {
+      targetOpacity += GRID_OPACITY_INCREMENT_RATE;
+    }
+    event.target.style.opacity = `${targetOpacity}%`;
+  } else {
+    event.target.style.opacity = `${GRID_OPACITY_INCREMENT_RATE}%`;
+  }
   GRID_DATA[event.target.id] = {
-    backgroundColor: GRID_BACKGROUND_COLOR
+    backgroundColor: GRID_BACKGROUND_COLOR,
+    opacity: parseFloat(event.target.style.opacity)*100
   };
   event.target.style.backgroundColor = GRID_DATA[event.target.id].backgroundColor;
 }
